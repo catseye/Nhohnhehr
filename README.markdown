@@ -148,9 +148,9 @@ The following program is a variation of the above which, when it
 encounters the end of input, writes out the bits in the reverse order
 they were read in, with the following changes:
 
--   for every "1" in the input, a "1" comes out
--   for every "0" in the input, "10" comes out
--   there's an extra "1" at the end of the output
+* for every `1` in the input, a `1` comes out
+* for every `0` in the input, `10` comes out
+* there's an extra `1` at the end of the output
 
     +------------+
     |    /}      |
@@ -191,3 +191,15 @@ Source
 This document was adapted from [the esolangs.org wiki page for
 Nhohnhehr](http://www.esolangs.org/wiki/Nhohnhehr), which, like all
 esowiki articles, has been placed under public domain dedication.
+
+Implementation
+--------------
+
+The Nhohnhehr distribution contains a Nhohnhehr interpreter, written
+in Python, based on [this implementation of
+Nhohnhehr](http://esolangs.org/wiki/User:Marinus/Nhohnhehr_interpreter)
+by [Marinus](http://www.esolangs.org/wiki/User:Marinus).  It
+is effectively the reference interpreter, since it seems to correctly
+implement the language described here, and there are, to the best of
+my knowledge, no other implementations of Nhohnhehr in existence.
+Like all content from the esowiki, it too is in the public domain.
