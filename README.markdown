@@ -144,13 +144,15 @@ It should be fairly clear at this point that this program will read all
 input bits, creating rooms thusly, terminating when there are no more
 input bits.
 
-The following program is a variation of the above which, when it
+We can write a program that is a variation of the above which, when it
 encounters the end of input, writes out the bits in the reverse order
 they were read in, with the following changes:
 
 * for every `1` in the input, a `1` comes out
 * for every `0` in the input, `10` comes out
 * there's an extra `1` at the end of the output
+
+Here is the program:
 
     +------------+
     |    /}      |
