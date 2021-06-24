@@ -26,7 +26,7 @@ def mulvec(v, m):
 
 
 # room
-class Room:
+class Room(object):
     data = None
     size = 0
 
@@ -165,7 +165,7 @@ class Room:
             self.transform(transform)
 
 
-class Environment:
+class Environment(object):
     rooms = {}
     ip = ()
     direction = ()
@@ -187,15 +187,14 @@ class Environment:
         roomY = y % self.roomsize
         return room[roomX, roomY]
 
-    def __init__(self, room, funcs):
-        (infunc, outfunc) = funcs
+    def __init__(self, room, io_system):
         self.rooms = {
             (0, 0): room
         }
         self.roomsize = room.size
         self.dir = Environment.RIGHT
         self.edgemode = Environment.WRAP
-        self.infunc, self.outfunc = infunc, outfunc
+        self.io_system = io_system
         self.halt = False
         # find initial instruction pointer
 
@@ -208,6 +207,12 @@ class Environment:
 
         if self.ip == (-1, -1):
             raise ValueError("no $ in room")
+
+    def infunc(self):
+        return self.io_system.units_in()
+
+    def outfunc(self, unit):
+        return self.io_system.units_out(unit)
 
     def roomCoords(self, v):
         (x, y) = v
@@ -285,6 +290,53 @@ class Environment:
             self.step()
 
 
+class NhohnhehrIO(object):
+    def units_in(self):
+        raise NotImplementedError('implement units_in please')
+
+    def units_out(self, unit):
+        raise NotImplementedError('implement units_out please')
+
+
+class BitsIO(NhohnhehrIO):
+    def units_in(self):
+        i = None
+        while i not in ('0', '1'):
+            i = sys.stdin.read(1)
+            if i == '':
+                raise IOError()  # eof
+        return int(i)
+
+    def units_out(self, bit):
+        sys.stdout.write(('0', '1')[bit])
+        sys.stdout.flush()
+
+
+class BytesIO(NhohnhehrIO):
+    def units_in(self, bits=[[]]):
+        # get data if necessary
+        if bits[0] == []:
+            i = sys.stdin.read(1)
+            if (i == ''):
+                raise IOError()  # eof
+            else:
+                bits[0] = [int(bool(ord(i) & (1 << b))) for b in range(7, -1, -1)]
+
+        # return data
+        bit = bits[0][0]
+        bits[0] = bits[0][1:]
+        return bit
+
+    def units_out(self, bit, bits=[[]]):
+        bits[0].append(bit)
+
+        # if we have 8 bits, output
+        if len(bits[0]) == 8:
+            sys.stdout.write(chr(sum(bits[0][7 - b] << b for b in range(7, -1, -1))))
+            sys.stdout.flush()
+            bits[0] = []
+
+
 def main(argv):
     if len(argv) not in (2, 3) or (len(argv) == 3 and not argv[1] in ('bits', 'bytes')):
         print("""\
@@ -307,49 +359,13 @@ Usage: [python] %s [bits|bytes] filename
         mode = argv[1]
         fname = argv[2]
 
-    # i/o functions
-    def bits_in():
-        i = None
-        while i not in ('0', '1'):
-            i = sys.stdin.read(1)
-            if i == '':
-                raise IOError()  # eof
-        return int(i)
-
-    def bits_out(bit):
-        sys.stdout.write(('0', '1')[bit])
-        sys.stdout.flush()
-
-    def bytes_in(bits=[[]]):
-        # get data if necessary
-        if bits[0] == []:
-            i = sys.stdin.read(1)
-            if (i == ''):
-                raise IOError()  # eof
-            else:
-                bits[0] = [int(bool(ord(i) & (1 << b))) for b in range(7, -1, -1)]
-
-        # return data
-        bit = bits[0][0]
-        bits[0] = bits[0][1:]
-        return bit
-
-    def bytes_out(bit, bits=[[]]):
-        bits[0].append(bit)
-
-        # if we have 8 bits, output
-        if len(bits[0]) == 8:
-            sys.stdout.write(chr(sum(bits[0][7 - b] << b for b in range(7, -1, -1))))
-            sys.stdout.flush()
-            bits[0] = []
-
-    modes = {
-        'bits': (bits_in, bits_out),
-        'bytes': (bytes_in, bytes_out)
-    }
+    io_system = {
+        'bits': BitsIO(),
+        'bytes': BytesIO(),
+    }[mode]
     try:
         with open(fname, 'r') as f:
-            Environment(Room(file=f), modes[mode]).run()
+            Environment(Room(file=f), io_system).run()
         if mode == 'bits':
             print  # newline
 
