@@ -325,28 +325,31 @@ class BitsIO(NhohnhehrIO):
 
 
 class BytesIO(NhohnhehrIO):
-    def units_in(self, bits=[[]]):
+    def __init__(self):
+        self.bits = [[]]
+
+    def units_in(self):
         # get data if necessary
-        if bits[0] == []:
+        if self.bits[0] == []:
             i = sys.stdin.read(1)
             if (i == ''):
                 raise IOError()  # eof
             else:
-                bits[0] = [int(bool(ord(i) & (1 << b))) for b in range(7, -1, -1)]
+                self.bits[0] = [int(bool(ord(i) & (1 << b))) for b in range(7, -1, -1)]
 
         # return data
-        bit = bits[0][0]
-        bits[0] = bits[0][1:]
+        bit = self.bits[0][0]
+        self.bits[0] = self.bits[0][1:]
         return bit
 
-    def units_out(self, bit, bits=[[]]):
-        bits[0].append(bit)
+    def units_out(self, bit):
+        self.bits[0].append(bit)
 
         # if we have 8 bits, output
-        if len(bits[0]) == 8:
-            sys.stdout.write(chr(sum(bits[0][7 - b] << b for b in range(7, -1, -1))))
+        if len(self.bits[0]) == 8:
+            sys.stdout.write(chr(sum(self.bits[0][7 - b] << b for b in range(7, -1, -1))))
             sys.stdout.flush()
-            bits[0] = []
+            self.bits[0] = []
 
 
 def main(argv):
