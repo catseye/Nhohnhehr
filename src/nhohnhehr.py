@@ -188,6 +188,10 @@ class Environment(object):
         room = self.rooms[self.roomCoords((x, y))]
         roomX = x % self.roomsize
         roomY = y % self.roomsize
+        if DEBUG:
+            sys.stdout.write('XY {}: room {}, roomXY {}\n'.format(
+                (x, y), self.roomCoords((x, y)), (roomX, roomY)
+            ))
         return room[roomX, roomY]
 
     def __init__(self, room, io_system):
@@ -219,7 +223,7 @@ class Environment(object):
 
     def roomCoords(self, v):
         (x, y) = v
-        return (int(x / self.roomsize), int(y / self.roomsize))
+        return (x // self.roomsize, y // self.roomsize)
 
     def advanceIP(self):
         newIP = addvec(self.ip, self.dir)
@@ -249,7 +253,7 @@ class Environment(object):
     def step(self):
         command = self[self.ip]
         if DEBUG:
-            sys.stderr.write('({}) @ {}\n'.format(command, self.ip))
+            sys.stdout.write('({}) @ {}\n'.format(command, self.ip))
         ccwrot = {
             self.LEFT: self.DOWN,
             self.RIGHT: self.UP,
