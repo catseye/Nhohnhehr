@@ -14,6 +14,9 @@
 import sys
 
 
+DEBUG = False
+
+
 def addvec(v1, v2):
     (x1, y1) = v1
     (x2, y2) = v2
@@ -245,6 +248,8 @@ class Environment(object):
 
     def step(self):
         command = self[self.ip]
+        if DEBUG:
+            sys.stderr.write('({}) @ {}\n'.format(command, self.ip))
         ccwrot = {
             self.LEFT: self.DOWN,
             self.RIGHT: self.UP,
@@ -297,6 +302,9 @@ class NhohnhehrIO(object):
     def units_out(self, unit):
         raise NotImplementedError('implement units_out please')
 
+    def close(self):
+        pass
+
 
 class BitsIO(NhohnhehrIO):
     def units_in(self):
@@ -309,6 +317,10 @@ class BitsIO(NhohnhehrIO):
 
     def units_out(self, bit):
         sys.stdout.write(('0', '1')[bit])
+        sys.stdout.flush()
+
+    def close(self):
+        sys.stdout.write("\n")
         sys.stdout.flush()
 
 
@@ -366,9 +378,7 @@ Usage: [python] %s [bits|bytes] filename
     try:
         with open(fname, 'r') as f:
             Environment(Room(file=f), io_system).run()
-        if mode == 'bits':
-            print  # newline
-
+        io_system.close()
     except Exception as e:
         print("Error: {}".format(e))
 
