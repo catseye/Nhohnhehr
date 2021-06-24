@@ -1,0 +1,3 @@
+    -> Functionality "Run Nhohnhehr program, outputting at most 80 bits" is implemented by
+    -> shell command
+    -> "python src/nhohnhehr.py bits %(test-body-file) <%(test-input-file) | head -c 80"
