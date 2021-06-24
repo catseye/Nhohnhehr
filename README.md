@@ -1,6 +1,15 @@
 The Nhohnhehr Programming Language
 ==================================
 
+Version 1.0
+| _Wiki entry_ [@ esolangs.org](https://esolangs.org/wiki/Nhohnhehr)
+| _See also:_ [Flobnar](https://github.com/catseye/Flobnar#readme)
+∘ [Wunnel](https://github.com/catseye/Wunnel#readme)
+∘ [Gemooy](https://github.com/catseye/Gemooy#readme)
+∘ [Jolverine](https://github.com/catseye/Jolverine#readme)
+
+- - - -
+
 Nhohnhehr is a remotely fungeoid esoteric programming language designed
 by Chris Pressey between December 4 and December 8, 2010.
 
