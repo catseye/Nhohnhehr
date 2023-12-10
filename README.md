@@ -3,10 +3,10 @@ The Nhohnhehr Programming Language
 
 Version 1.0
 | _Wiki entry_ [@ esolangs.org](https://esolangs.org/wiki/Nhohnhehr)
-| _See also:_ [Flobnar](https://github.com/catseye/Flobnar#readme)
-∘ [Wunnel](https://github.com/catseye/Wunnel#readme)
-∘ [Gemooy](https://github.com/catseye/Gemooy#readme)
-∘ [Jolverine](https://github.com/catseye/Jolverine#readme)
+| _See also:_ [Flobnar](https://codeberg.org/catseye/Flobnar#flobnar)
+∘ [Wunnel](https://codeberg.org/catseye/Wunnel#wunnel)
+∘ [Gemooy](https://codeberg.org/catseye/Gemooy#gemooy)
+∘ [Jolverine](https://codeberg.org/catseye/Jolverine#jolverine)
 
 - - - -
 
